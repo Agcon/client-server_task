@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div class="container">
+    <h2>Запись ограниченного числа данных</h2>
+    <form id="limitForm" onsubmit="fetchLimitData(event)">
+        <input type="number" id="limit" placeholder="Введите значение">
+        <button type="submit">Записать</button>
+    </form>
+
+    <h2>Запись данных, в которых возраст не меньше значения</h2>
+    <form id="ageForm" onsubmit="fetchAgeData(event)">
+        <input type="number" id="age" placeholder="Введите возраст">
+        <button type="submit">Записать</button>
+    </form>
+</div>
+
+<script>
+    function fetchLimitData(event) {
+        event.preventDefault();
+        const limit = document.getElementById('limit').value;
+
+        fetch(`/getUsers?value=${limit}`, {
+            method: 'GET',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка сети');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Данные по лимиту:', data);
+                alert('Данные успешно записаны');
+            })
+            .catch(error => {
+                console.error('Ошибка при запросе данных:', error);
+                alert('Ошибка при запросе данных');
+            });
+    }
+
+    function fetchAgeData(event) {
+        event.preventDefault();
+        const age = document.getElementById('age').value;
+
+        fetch(`/getUsers/age?value=${age}`, {
+            method: 'GET',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка сети');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Данные по возрасту:', data);
+                alert('Данные успешно записаны');
+            })
+            .catch(error => {
+                console.error('Ошибка при запросе данных:', error);
+                alert('Ошибка при запросе данных');
+            });
+    }
+</script>
+</body>
+</html>
